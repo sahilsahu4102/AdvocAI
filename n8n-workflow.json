@@ -1,0 +1,176 @@
+{
+  "name": "Animal Advocacy Research Agent - Serper + ScrapingDog Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "animal-research",
+        "responseMode": "responseNode"
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://google.serper.dev/search",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "X-API-KEY", "value": "={{ $env.SERPER_API_KEY }}" },
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={ \"q\": \"{{ $json.body.query }} {{ $json.body.region && $json.body.region !== 'Global' ? 'in ' + $json.body.region : '' }} animal rights animal welfare\", \"num\": 10 }"
+      },
+      "id": "serper-search",
+      "name": "Serper Search",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [470, 300]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const results = $input.first().json.organic || [];\nconst top3 = results.slice(0, 3);\nreturn top3.map(r => ({ json: { url: r.link, title: r.title, snippet: r.snippet } }));"
+      },
+      "id": "split-urls",
+      "name": "Split URLs",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [690, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://api.scrapingdog.com/scrape",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            { "name": "api_key", "value": "={{ $env.SCRAPINGDOG_API_KEY }}" },
+            { "name": "url", "value": "={{ $json.url }}" },
+            { "name": "dynamic", "value": "false" }
+          ]
+        },
+        "options": {
+          "response": { "response": { "responseFormat": "string", "responseMode": "onReceived", "putResponseInField": "data" } }
+        }
+      },
+      "id": "scrapingdog-fetch",
+      "name": "ScrapingDog Fetch",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [910, 300],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "jsCode": "let combinedText = '';\nconst sources = [];\nconst scrapedItems = $input.all();\nconst originalItems = $('Split URLs').all();\n\nfor (let i = 0; i < scrapedItems.length; i++) {\n  const scrapedItem = scrapedItems[i];\n  const originalItem = originalItems[i] || { json: {} };\n  \n  const url = originalItem.json.url || 'Unknown URL';\n  const title = originalItem.json.title || 'Unknown Title';\n  const snippet = originalItem.json.snippet || '';\n  \n  // Handle both flat string responses and JSON objects from ScrapingDog\n  let html = '';\n  if (typeof scrapedItem.json.data === 'string') html = scrapedItem.json.data;\n  else if (typeof scrapedItem.json === 'string') html = scrapedItem.json;\n  else html = JSON.stringify(scrapedItem.json);\n  \n  let text = html.replace(/<style[^>]*>[\\s\\S]*?<\\/style>/gi, '')\n                 .replace(/<script[^>]*>[\\s\\S]*?<\\/script>/gi, '')\n                 .replace(/<[^>]+>/g, ' ')\n                 .replace(/\\s+/g, ' ')\n                 .trim()\n                 .substring(0, 5000);\n                 \n  combinedText += `Source: ${title}\\nURL: ${url}\\nSnippet: ${snippet}\\nContent:\\n${text}\\n\\n---\\n\\n`;\n  sources.push({ title, link: url, snippet });\n}\n\nreturn [{ json: { combinedContext: combinedText, sources: sources, query: $('Webhook Trigger').first().json.body.query } }];"
+      },
+      "id": "aggregate-and-clean",
+      "name": "Aggregate and Clean",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1130, 300]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const query = $('Webhook Trigger').first().json.body.query;\nconst region = $('Webhook Trigger').first().json.body.region || 'Global';\nconst context = $input.first().json.combinedContext;\nconst sources = $input.first().json.sources;\n\nconst systemMsg = 'You are an elite AI research agent for animal advocacy. Your ONLY goal is to provide HIGHLY SPECIFIC, actionable research. \\n\\nRULES:\\n1. NO GENERIC STATEMENTS. Do not say \"organizations are fighting this.\" Instead, name the exact organization (e.g., PETA, Mercy for Animals) and the exact campaign.\\n2. Provide specific dates, statistics, and verifiable facts found in the context.\\n3. If a Region ('+region+') is specified, focus specifically on laws, organizations, and sentiment relevant to that region.\\n4. Provide 3-4 \\\"followUps\\\" (questions or topics) the user can click to dive deeper.\\n5. Provide \\\"evidence\\\" - extract 3 key facts with titles, explanations, and their source URLs.\\n\\nYou MUST output your response in valid JSON matching this schema exactly:\\n{\\n  \"insights\": [string],\\n  \"organizations\": [string],\\n  \"trends\": [string],\\n  \"actions\": [string],\\n  \"evidence\": [{ \"title\": string, \"explanation\": string, \"url\": string }],\\n  \"followUps\": [string]\\n}\\n\\nCRITICAL: You are an agent. First, output your reasoning inside <think>...</think> tags. Then, follow it with ONLY the valid JSON block.';\n\nconst userMsg = 'Research query: \"' + query + '\"\\nRegion Focus: ' + region + '\\n\\nContext from Web Search and Scrapes:\\n' + context + '\\n\\nAnalyze the context, output <think>...</think> steps, then output the JSON.';\n\nreturn [{ json: { systemMsg, userMsg, sources } }];"
+      },
+      "id": "build-llm-request",
+      "name": "Build LLM Request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1350, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Authorization", "value": "=Bearer {{ $env.OPENROUTER_API_KEY }}" },
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"model\":\"google/gemini-2.0-flash-001\",\"messages\":[{\"role\":\"system\",\"content\":{{ JSON.stringify($json.systemMsg) }}},{\"role\":\"user\",\"content\":{{ JSON.stringify($json.userMsg) }}}],\"temperature\":0.3,\"max_tokens\":1500}"
+      },
+      "id": "openrouter-llm",
+      "name": "OpenRouter LLM",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [1570, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const llmResponse = $input.first().json.choices[0].message.content;\n\n// Get sources from the Aggregate and Clean node instead, since it's preserved better there\nlet sources = [];\nlet query = '';\ntry {\n  sources = $('Build LLM Request').first().json.sources || [];\n  query = $('Webhook Trigger').first().json.body.query || '';\n} catch(e) { console.error(e); }\n\nlet parsed;\ntry {\n  // Extract JSON after </think> if reasoning was used\n  let jsonStr = llmResponse;\n  if (jsonStr.includes('</think>')) {\n    jsonStr = jsonStr.split('</think>')[1];\n  }\n  \n  const cleaned = jsonStr.replace(/```json\\n?/g, '').replace(/```\\n?/g, '').trim();\n  parsed = JSON.parse(cleaned);\n} catch(e) {\n  parsed = { \n    insights: [\"Failed to parse strict JSON. Raw output: \" + llmResponse.substring(0, 100) + \"...\"], \n    organizations: [], \n    trends: [], \n    actions: [],\n    evidence: [],\n    followUps: []\n  };\n}\n\nreturn [{ json: {\n  query: query,\n  insights: parsed.insights || [],\n  organizations: parsed.organizations || [],\n  trends: parsed.trends || [],\n  actions: parsed.actions || [],\n  evidence: parsed.evidence || [],\n  followUps: parsed.followUps || [],\n  sources: sources\n}}];"
+      },
+      "id": "format-response",
+      "name": "Format Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1790, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}"
+      },
+      "id": "respond-webhook",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [2010, 300]
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {
+      "main": [
+        [{ "node": "Serper Search", "type": "main", "index": 0 }]
+      ]
+    },
+    "Serper Search": {
+      "main": [
+        [{ "node": "Split URLs", "type": "main", "index": 0 }]
+      ]
+    },
+    "Split URLs": {
+      "main": [
+        [{ "node": "ScrapingDog Fetch", "type": "main", "index": 0 }]
+      ]
+    },
+    "ScrapingDog Fetch": {
+      "main": [
+        [{ "node": "Aggregate and Clean", "type": "main", "index": 0 }]
+      ]
+    },
+    "Aggregate and Clean": {
+      "main": [
+        [{ "node": "Build LLM Request", "type": "main", "index": 0 }]
+      ]
+    },
+    "Build LLM Request": {
+      "main": [
+        [{ "node": "OpenRouter LLM", "type": "main", "index": 0 }]
+      ]
+    },
+    "OpenRouter LLM": {
+      "main": [
+        [{ "node": "Format Response", "type": "main", "index": 0 }]
+      ]
+    },
+    "Format Response": {
+      "main": [
+        [{ "node": "Respond to Webhook", "type": "main", "index": 0 }]
+      ]
+    }
+  }
+}
