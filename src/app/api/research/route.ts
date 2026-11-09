@@ -62,7 +62,7 @@ export async function POST(req: NextRequest) {
   } catch (err) {
     console.error("Research API error:", err);
     return NextResponse.json(
-      { error: `Internal server error connecting to n8n. URL in memory: ${process.env.N8N_WEBHOOK_URL} | Error: ${err instanceof Error ? err.message : String(err)}` },
+      { error: "Could not reach the research workflow. Please try again in a moment." }, // the details (including the webhook URL) are in the server log above
       { status: 500 }
     );
   }

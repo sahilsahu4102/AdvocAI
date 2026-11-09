@@ -98,6 +98,16 @@ app/
 
 ---
 
+## 🧪 Tests
+
+```bash
+npm test      # 5 tests, no network, no n8n, no API key
+```
+
+The Next.js route `src/app/api/research/route.ts` forwards each query to an n8n workflow, so the tests replace `fetch` and the environment and check the route's own behaviour: an empty or non-text query is refused with 400 and nothing is forwarded, a valid query goes to the webhook with the region (default `Global`) and the answer comes back, a missing `N8N_WEBHOOK_URL` is a clear 500, a workflow error is a 502, and an unreachable workflow is a 500. The last one found a real bug, now fixed: the response used to include the private webhook URL. The n8n workflow itself (the search and the language model call) is not covered. GitHub Actions runs the tests and a type check on every push.
+
+---
+
 ## 📦 Deployment
 
 ### Vercel
