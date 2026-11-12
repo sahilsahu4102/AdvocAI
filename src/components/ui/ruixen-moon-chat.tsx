@@ -62,12 +62,24 @@ function useAutoResizeTextarea({ minHeight, maxHeight }: AutoResizeProps) {
   return { textareaRef, adjustHeight };
 }
 
+// Each item links to the page it came from; a plain string (an older workflow, or the
+// parse-failure message) is shown without a link
+type Item = string | { text: string; url?: string };
+const asSourced = (item: Item) => (typeof item === "string" ? { text: item, url: undefined } : item);
+const hostname = (url: string) => {
+  try {
+    return new URL(url).hostname.replace(/^www\./, "");
+  } catch {
+    return "source";
+  }
+};
+
 interface ResearchResult {
   query?: string;
-  insights: string[];
-  organizations: string[];
-  trends: string[];
-  actions: string[];
+  insights: Item[];
+  organizations: Item[];
+  trends: Item[];
+  actions: Item[];
   evidence?: { title: string; explanation: string; url: string }[];
   followUps?: string[];
   sources: { title: string; link: string; snippet: string }[];
@@ -163,8 +175,9 @@ export default function AnimalAdvocacyChat() {
     }
   };
 
-  const copySection = async (section: string, content: string[]) => {
-    await navigator.clipboard.writeText(content.join("\n"));
+  const copySection = async (section: string, content: Item[]) => {
+    const lines = content.map(asSourced).map((i) => (i.url ? `${i.text} (${i.url})` : i.text));
+    await navigator.clipboard.writeText(lines.join("\n"));
     setCopiedSection(section);
     setTimeout(() => setCopiedSection(null), 2000);
   };
@@ -530,7 +543,6 @@ export default function AnimalAdvocacyChat() {
                   <Globe className="w-4 h-4" />
                 </div>
                 <h3 className="text-emerald-100 font-semibold text-sm tracking-wide">Top Evidence</h3>
-                <span className="ml-2 text-[10px] uppercase font-bold tracking-wider text-emerald-400 bg-emerald-900/40 px-2 py-0.5 rounded-full border border-emerald-500/20">Verified</span>
               </div>
               <ul className="space-y-3 relative z-10">
                 {result.evidence.map((item, i) => (
@@ -673,7 +685,7 @@ export default function AnimalAdvocacyChat() {
 interface ResultCardProps {
   icon: React.ReactNode;
   title: string;
-  items: string[];
+  items: Item[];
   color: string;
   copiedSection: string | null;
   onCopy: () => void;
@@ -719,11 +731,21 @@ function ResultCard({
         </Button>
       </div>
       <ul className="space-y-2">
-        {items.map((item, i) => (
+        {items.map(asSourced).map((item, i) => (
           <li key={i} className="flex items-start gap-2.5">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500/60 mt-2 flex-shrink-0" />
             <span className="text-emerald-300/80 text-sm leading-relaxed">
-              {item}
+              {item.text}
+              {item.url && (
+                <a
+                  href={item.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="ml-2 text-xs text-emerald-500 hover:text-emerald-300 hover:underline whitespace-nowrap"
+                >
+                  {hostname(item.url)}
+                </a>
+              )}
             </span>
           </li>
         ))}

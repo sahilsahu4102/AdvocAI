@@ -11,7 +11,7 @@ An AI-powered research tool for animal rights organizations. Enter a query and g
 ## ✨ Features
 
 - **AI-Powered Research** — Searches the web and analyzes results with an LLM
-- **Structured Output** — Key insights, organizations, trends, and actions
+- **Structured Output** — Key insights, organizations, trends, and actions, each linked to the page it came from
 - **Quick Actions** — Pre-built prompts for common research topics
 - **Copy to Clipboard** — Copy any section with one click
 - **Research History** — Sidebar with previous queries
@@ -101,10 +101,12 @@ app/
 ## 🧪 Tests
 
 ```bash
-npm test      # 5 tests, no network, no n8n, no API key
+npm test      # 9 tests, no network, no n8n, no API key
 ```
 
-The Next.js route `src/app/api/research/route.ts` forwards each query to an n8n workflow, so the tests replace `fetch` and the environment and check the route's own behaviour: an empty or non-text query is refused with 400 and nothing is forwarded, a valid query goes to the webhook with the region (default `Global`) and the answer comes back, a missing `N8N_WEBHOOK_URL` is a clear 500, a workflow error is a 502, and an unreachable workflow is a 500. The last one found a real bug, now fixed: the response used to include the private webhook URL. The n8n workflow itself (the search and the language model call) is not covered. GitHub Actions runs the tests and a type check on every push.
+The Next.js route `src/app/api/research/route.ts` forwards each query to an n8n workflow, so the tests replace `fetch` and the environment and check the route's own behaviour: an empty or non-text query is refused with 400 and nothing is forwarded, a valid query goes to the webhook with the region (default `Global`) and the answer comes back, a missing `N8N_WEBHOOK_URL` is a clear 500, a workflow error is a 502, and an unreachable workflow is a 500. The last one found a real bug, now fixed: the response used to include the private webhook URL.
+
+`tests/workflow.test.ts` runs the workflow's own Code nodes from `n8n-workflow.json` with stubbed inputs: every insight, organization, trend and action must cite one of the pages the workflow read (an item citing any other page, or none, is dropped), and a page that fails to load contributes only its search snippet, not the error text. The search, page fetch and model calls are n8n HTTP nodes and are not covered. GitHub Actions runs the tests and a type check on every push.
 
 ---
 
