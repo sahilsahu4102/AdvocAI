@@ -91,27 +91,33 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
-            { "name": "Authorization", "value": "=Bearer {{ $env.OPENROUTER_API_KEY }}" },
-            { "name": "Content-Type", "value": "application/json" }
+            {
+              "name": "x-goog-api-key",
+              "value": "={{ $env.GEMINI_API_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
           ]
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\"model\":\"google/gemini-2.0-flash-001\",\"messages\":[{\"role\":\"system\",\"content\":{{ JSON.stringify($json.systemMsg) }}},{\"role\":\"user\",\"content\":{{ JSON.stringify($json.userMsg) }}}],\"temperature\":0.3,\"max_tokens\":1500}"
+        "jsonBody": "={\"systemInstruction\":{\"parts\":[{\"text\":{{ JSON.stringify($json.systemMsg) }}}]},\"contents\":[{\"role\":\"user\",\"parts\":[{\"text\":{{ JSON.stringify($json.userMsg) }}}]}],\"generationConfig\":{\"temperature\":0.3,\"maxOutputTokens\":8192}}"
       },
-      "id": "openrouter-llm",
-      "name": "OpenRouter LLM",
+      "id": "gemini-llm",
+      "name": "Gemini LLM",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 3,
       "position": [1570, 300]
     },
     {
       "parameters": {
-        "jsCode": "const llmResponse = $input.first().json.choices[0].message.content;\n\n// Get sources from the Aggregate and Clean node instead, since it's preserved better there\nlet sources = [];\nlet query = '';\ntry {\n  sources = $('Build LLM Request').first().json.sources || [];\n  query = $('Webhook Trigger').first().json.body.query || '';\n} catch(e) { console.error(e); }\n\nlet parsed;\nlet parseFailed = false;\ntry {\n  // Extract JSON after </think> if reasoning was used\n  let jsonStr = llmResponse;\n  if (jsonStr.includes('</think>')) {\n    jsonStr = jsonStr.split('</think>')[1];\n  }\n  \n  const cleaned = jsonStr.replace(/```json\\n?/g, '').replace(/```\\n?/g, '').trim();\n  parsed = JSON.parse(cleaned);\n} catch(e) {\n  parseFailed = true;\n  parsed = { \n    insights: [\"Failed to parse strict JSON. Raw output: \" + llmResponse.substring(0, 100) + \"...\"], \n    organizations: [], \n    trends: [], \n    actions: [],\n    evidence: [],\n    followUps: []\n  };\n}\n\n// Keep only items that cite a page this workflow read; each url becomes that page's own link\nconst norm = u => String(u || '').trim().replace(/\\/+$/, '');\nconst links = new Map(sources.map(s => [norm(s.link), s.link]));\nconst cited = items => (Array.isArray(items) ? items : [])\n  .filter(i => i && typeof i.text === 'string' && links.has(norm(i.url)))\n  .map(i => ({ text: i.text, url: links.get(norm(i.url)) }));\nif (parseFailed) return [{ json: { query, ...parsed, sources } }];\n\nreturn [{ json: {\n  query: query,\n  insights: cited(parsed.insights),\n  organizations: cited(parsed.organizations),\n  trends: cited(parsed.trends),\n  actions: cited(parsed.actions),\n  evidence: (Array.isArray(parsed.evidence) ? parsed.evidence : []).filter(e => e && links.has(norm(e.url))),\n  followUps: parsed.followUps || [],\n  sources: sources\n}}];"
+        "jsCode": "// Gemini API answer (candidates/parts); the OpenRouter shape is still read for older imports\nconst llm = $input.first().json;\nconst llmResponse = llm.choices ? llm.choices[0].message.content\n  : (((llm.candidates || [])[0] || {}).content || { parts: [] }).parts.filter(p => !p.thought).map(p => p.text || '').join('');\n\n// Get sources from the Aggregate and Clean node instead, since it's preserved better there\nlet sources = [];\nlet query = '';\ntry {\n  sources = $('Build LLM Request').first().json.sources || [];\n  query = $('Webhook Trigger').first().json.body.query || '';\n} catch(e) { console.error(e); }\n\nlet parsed;\nlet parseFailed = false;\ntry {\n  // Extract JSON after </think> if reasoning was used\n  let jsonStr = llmResponse;\n  if (jsonStr.includes('</think>')) {\n    jsonStr = jsonStr.split('</think>')[1];\n  }\n  \n  const cleaned = jsonStr.replace(/```json\\n?/g, '').replace(/```\\n?/g, '').trim();\n  // Models sometimes label or wrap the JSON (\"@json\", prose): keep the outermost object\n  const first = cleaned.indexOf('{'), last = cleaned.lastIndexOf('}');\n  parsed = JSON.parse(first >= 0 && last > first ? cleaned.slice(first, last + 1) : cleaned);\n} catch(e) {\n  parseFailed = true;\n  parsed = { \n    insights: [\"Failed to parse strict JSON. Raw output: \" + llmResponse.substring(0, 100) + \"...\"], \n    organizations: [], \n    trends: [], \n    actions: [],\n    evidence: [],\n    followUps: []\n  };\n}\n\n// Keep only items that cite a page this workflow read; each url becomes that page's own link\nconst norm = u => String(u || '').trim().replace(/\\/+$/, '');\nconst links = new Map(sources.map(s => [norm(s.link), s.link]));\nconst cited = items => (Array.isArray(items) ? items : [])\n  .filter(i => i && typeof i.text === 'string' && links.has(norm(i.url)))\n  .map(i => ({ text: i.text, url: links.get(norm(i.url)) }));\nif (parseFailed) return [{ json: { query, ...parsed, sources } }];\n\nreturn [{ json: {\n  query: query,\n  insights: cited(parsed.insights),\n  organizations: cited(parsed.organizations),\n  trends: cited(parsed.trends),\n  actions: cited(parsed.actions),\n  evidence: (Array.isArray(parsed.evidence) ? parsed.evidence : []).filter(e => e && links.has(norm(e.url))),\n  followUps: parsed.followUps || [],\n  sources: sources\n}}];"
       },
       "id": "format-response",
       "name": "Format Response",
@@ -159,10 +165,10 @@
     },
     "Build LLM Request": {
       "main": [
-        [{ "node": "OpenRouter LLM", "type": "main", "index": 0 }]
+        [{ "node": "Gemini LLM", "type": "main", "index": 0 }]
       ]
     },
-    "OpenRouter LLM": {
+    "Gemini LLM": {
       "main": [
         [{ "node": "Format Response", "type": "main", "index": 0 }]
       ]

@@ -61,10 +61,25 @@ test('items keep a link to a page the workflow read; items citing any other page
   assert.equal(out.sources.length, 3);
 });
 
+test("the AI step calls Google's Gemini API with the key from n8n's settings, and its answer is read", () => {
+  const llm = workflow.nodes.find((n: Json) => n.name === 'Gemini LLM');
+  assert.match(llm.parameters.url, /^https:\/\/generativelanguage\.googleapis\.com\/v1beta\/models\/gemini-[\w.-]+:generateContent$/);
+  assert.ok(JSON.stringify(llm.parameters).includes('$env.GEMINI_API_KEY'), 'the key must come from settings, never the file');
+  const answer = { insights: [{ text: 'Cited', url: 'https://example.org/a' }] };
+  const gemini = { candidates: [{ content: { parts: [{ text: 'hidden reasoning', thought: true }, { text: JSON.stringify(answer) }] } }] };
+  const out = run('Format Response', [{ json: gemini }], { 'Build LLM Request': [{ json: request }], 'Webhook Trigger': webhook })[0].json;
+  assert.deepEqual(out.insights, [{ text: 'Cited', url: 'https://example.org/a' }]);
+});
+
 test('a page that failed to load adds only its search snippet, never the error text', () => {
   assert.ok(!aggregate.combinedContext.includes('credits exhausted'));
   assert.ok(aggregate.combinedContext.includes('snippet 2'));
   assert.ok(!aggregate.combinedContext.includes('x()')); // scripts are stripped from fetched pages
+});
+
+test('an answer with a label before its JSON is still read (Gemini wrote "@json" on 13 Nov)', () => {
+  const reply = '<think>\n</think>@json\n' + JSON.stringify({ insights: [{ text: 'Cited', url: 'https://example.org/a' }] });
+  assert.deepEqual(format(reply).insights, [{ text: 'Cited', url: 'https://example.org/a' }]);
 });
 
 test('an answer that is not JSON still returns a message rather than an empty brief', () => {

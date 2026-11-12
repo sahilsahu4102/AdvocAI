@@ -673,7 +673,7 @@ export default function AnimalAdvocacyChat() {
       <footer className="w-full border-t border-emerald-900/20 bg-black/20 backdrop-blur-sm z-10 mt-auto">
         <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-center">
           <p className="text-emerald-800 text-xs">
-            AI Animal Advocacy Research Agent • Powered by Serper & OpenRouter
+            AI Animal Advocacy Research Agent • Powered by Serper & Gemini
           </p>
         </div>
       </footer>

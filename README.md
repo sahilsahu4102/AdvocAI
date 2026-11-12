@@ -28,7 +28,7 @@ An AI-powered research tool for animal rights organizations. Enter a query and g
 - npm
 - [n8n](https://n8n.io/) installed locally (`npx n8n`) or hosted
 - [Serper API Key](https://serper.dev/) (free tier available)
-- [OpenRouter API Key](https://openrouter.ai/) (free models available)
+- [Gemini API key](https://aistudio.google.com/apikey) (free tier)
 
 ### Quick Start
 
@@ -92,7 +92,7 @@ app/
 | Frontend | Next.js 15, Tailwind CSS 4   |
 | Language | TypeScript                   |
 | Search   | Serper API (Google Search)   |
-| LLM      | OpenRouter (Gemini Flash)    |
+| LLM      | Gemini API (Gemini 3.5 Flash-Lite) |
 | Workflow | n8n (optional orchestration) |
 | Deploy   | Vercel (frontend)            |
 
@@ -119,7 +119,7 @@ npm run build
 # Deploy via Vercel CLI or connect your GitHub repo
 ```
 
-Set `SERPER_API_KEY` and `OPENROUTER_API_KEY` in Vercel environment variables.
+The web app needs only `N8N_WEBHOOK_URL`. The workflow reads `SERPER_API_KEY`, `SCRAPINGDOG_API_KEY` and `GEMINI_API_KEY` from n8n's environment; start n8n with `N8N_BLOCK_ENV_ACCESS_IN_NODE=false` so it can read them.
 
 ---
 
