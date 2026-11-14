@@ -1,0 +1,468 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-14T09:36:39Z",
+  "title": "Design System: Animal Advocacy Research",
+  "extensions": {
+    "colorMeta": {
+      "cabinet": {
+        "role": "primary",
+        "displayName": "Cabinet",
+        "canonical": "#25362c",
+        "tonalRamp": [
+          "#0f1612",
+          "#151f19",
+          "#1c2821",
+          "#223128",
+          "#415047",
+          "#79847d",
+          "#b1b7b4",
+          "#e9ebea"
+        ]
+      },
+      "cabinet-hover": {
+        "role": "primary",
+        "displayName": "Cabinet Hover",
+        "canonical": "#31463a",
+        "tonalRamp": [
+          "#0f1612",
+          "#19241d",
+          "#223129",
+          "#2c3f34",
+          "#4b5e53",
+          "#808d86",
+          "#b5bdb9",
+          "#eaeceb"
+        ]
+      },
+      "cabinet-ink": {
+        "role": "primary",
+        "displayName": "Cabinet Ink",
+        "canonical": "#e3ebdd",
+        "tonalRamp": [
+          "#0f1612",
+          "#4c534c",
+          "#889086",
+          "#c5cdc0",
+          "#e7eee1",
+          "#eef3ea",
+          "#f5f8f3",
+          "#fcfdfc"
+        ]
+      },
+      "red": {
+        "role": "secondary",
+        "displayName": "Margin Red",
+        "canonical": "#a8302a",
+        "tonalRamp": [
+          "#0f1612",
+          "#3b1d19",
+          "#662520",
+          "#922c27",
+          "#b34b45",
+          "#ca807c",
+          "#e0b5b3",
+          "#f6eaea"
+        ]
+      },
+      "red-wash": {
+        "role": "secondary",
+        "displayName": "Red Wash",
+        "canonical": "#f6e1dd",
+        "tonalRamp": [
+          "#0f1612",
+          "#51504c",
+          "#938a86",
+          "#d5c4c0",
+          "#f7e5e1",
+          "#f9edea",
+          "#fcf4f3",
+          "#fefcfc"
+        ]
+      },
+      "foam": {
+        "role": "neutral",
+        "displayName": "Foam",
+        "canonical": "#e3e8df",
+        "tonalRamp": [
+          "#0f1612",
+          "#4c524d",
+          "#888e87",
+          "#c5cac2",
+          "#e7ebe3",
+          "#eef1eb",
+          "#f5f7f4",
+          "#fcfdfc"
+        ]
+      },
+      "sunk": {
+        "role": "neutral",
+        "displayName": "Sunk",
+        "canonical": "#d3dace",
+        "tonalRamp": [
+          "#0f1612",
+          "#474e48",
+          "#7f867d",
+          "#b7beb3",
+          "#d9dfd4",
+          "#e4e8e1",
+          "#eff2ee",
+          "#fbfbfa"
+        ]
+      },
+      "label": {
+        "role": "neutral",
+        "displayName": "Label",
+        "canonical": "#fbfbf7",
+        "tonalRamp": [
+          "#0f1612",
+          "#525753",
+          "#969995",
+          "#d9dad6",
+          "#fcfcf8",
+          "#fdfdfa",
+          "#fefefc",
+          "#fffffe"
+        ]
+      },
+      "field": {
+        "role": "neutral",
+        "displayName": "Field",
+        "canonical": "#fefefc",
+        "tonalRamp": [
+          "#0f1612",
+          "#535855",
+          "#989b98",
+          "#dcdddb",
+          "#fefefc",
+          "#fefefd",
+          "#fffffe",
+          "#ffffff"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#1b1f1b",
+        "tonalRamp": [
+          "#0f1612",
+          "#121915",
+          "#161b17",
+          "#191e1a",
+          "#383c38",
+          "#737573",
+          "#aeafae",
+          "#e8e9e8"
+        ]
+      },
+      "ink-2": {
+        "role": "neutral",
+        "displayName": "Ink 2",
+        "canonical": "#3c443d",
+        "tonalRamp": [
+          "#0f1612",
+          "#1c231e",
+          "#29302b",
+          "#363d37",
+          "#555c56",
+          "#878c88",
+          "#b9bcba",
+          "#ececec"
+        ]
+      },
+      "ink-3": {
+        "role": "neutral",
+        "displayName": "Ink 3",
+        "canonical": "#566057",
+        "tonalRamp": [
+          "#0f1612",
+          "#232b26",
+          "#384039",
+          "#4c554d",
+          "#6c746d",
+          "#979d98",
+          "#c3c6c3",
+          "#eeefee"
+        ]
+      },
+      "rule": {
+        "role": "neutral",
+        "displayName": "Rule",
+        "canonical": "#b4beaf",
+        "tonalRamp": [
+          "#0f1612",
+          "#3e463f",
+          "#6d766c",
+          "#9ca699",
+          "#bec6b9",
+          "#d1d7ce",
+          "#e4e8e2",
+          "#f8f8f7"
+        ]
+      },
+      "source-a": {
+        "role": "tertiary",
+        "displayName": "Source A",
+        "canonical": "#1f5fa8",
+        "tonalRamp": [
+          "#0f1612",
+          "#142b3d",
+          "#184068",
+          "#1d5593",
+          "#3c74b3",
+          "#759dca",
+          "#afc6e0",
+          "#e9eff6"
+        ]
+      },
+      "source-b": {
+        "role": "tertiary",
+        "displayName": "Source B",
+        "canonical": "#8a5d00",
+        "tonalRamp": [
+          "#0f1612",
+          "#322a0d",
+          "#553f08",
+          "#785303",
+          "#997221",
+          "#b79b62",
+          "#d5c5a4",
+          "#f3efe6"
+        ]
+      },
+      "source-c": {
+        "role": "tertiary",
+        "displayName": "Source C",
+        "canonical": "#7a3e8a",
+        "tonalRamp": [
+          "#0f1612",
+          "#2e2134",
+          "#4c2d57",
+          "#6b3879",
+          "#8b5799",
+          "#ad88b7",
+          "#d0bad5",
+          "#f2ecf3"
+        ]
+      },
+      "source-d": {
+        "role": "tertiary",
+        "displayName": "Source D",
+        "canonical": "#1d6b63",
+        "tonalRamp": [
+          "#0f1612",
+          "#132e29",
+          "#174740",
+          "#1b5f57",
+          "#3a7e77",
+          "#74a49f",
+          "#aecac7",
+          "#e8f0ef"
+        ]
+      },
+      "source-e": {
+        "role": "tertiary",
+        "displayName": "Source E",
+        "canonical": "#55607a",
+        "tonalRamp": [
+          "#0f1612",
+          "#232b30",
+          "#37404d",
+          "#4b556b",
+          "#6b748b",
+          "#979dad",
+          "#c2c6d0",
+          "#eeeff2"
+        ]
+      },
+      "source-f": {
+        "role": "tertiary",
+        "displayName": "Source F",
+        "canonical": "#6b5b2e",
+        "tonalRamp": [
+          "#0f1612",
+          "#292a1a",
+          "#443d22",
+          "#5e512a",
+          "#7e7049",
+          "#a49a7f",
+          "#cac4b4",
+          "#f0efea"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "The query as the brief's title."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Section headings."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Page titles in the key and drawer headings."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "The lines themselves, on a 62ch measure."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Field labels, toggles and buttons."
+      },
+      "data": {
+        "displayName": "Data",
+        "purpose": "Hosts, elapsed seconds and raw reports: values the system recorded."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "settle",
+        "value": "0.36s cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "One entrance when a brief arrives: the key's tabs pin in, then the sections settle. Removed entirely under prefers-reduced-motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "drawer-beside",
+        "value": "1100px"
+      },
+      {
+        "name": "phone",
+        "value": "640px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The one filled action on a screen; pressing darkens it to the cabinet green.",
+      "html": "<button class=\"ds-btn ds-primary\">Research</button>",
+      "css": ".ds-btn{font-family:'Atkinson Hyperlegible Next',system-ui,sans-serif;font-weight:650;font-size:15px;min-height:44px;padding:0 18px;border:1.5px solid #1b1f1b;border-radius:0;cursor:pointer;background:transparent;color:#1b1f1b}.ds-primary{background:#1b1f1b;color:#fbfbf7}.ds-primary:hover{background:#25362c}.ds-btn:focus-visible,.ds-field:focus-visible{outline:3px solid #1b1f1b;outline-offset:2px}"
+    },
+    {
+      "name": "Outline Button",
+      "kind": "button",
+      "refersTo": "button",
+      "description": "A starting point or secondary action; hover fills ink.",
+      "html": "<button class=\"ds-btn ds-outline\">Latest campaigns against animal testing</button>",
+      "css": ".ds-btn{font-family:'Atkinson Hyperlegible Next',system-ui,sans-serif;font-weight:650;font-size:15px;min-height:44px;padding:0 18px;border:1.5px solid #1b1f1b;border-radius:0;cursor:pointer;background:transparent;color:#1b1f1b}.ds-outline{font-weight:600;text-align:left}.ds-outline:hover{background:#1b1f1b;color:#fbfbf7}.ds-btn:focus-visible,.ds-field:focus-visible{outline:3px solid #1b1f1b;outline-offset:2px}"
+    },
+    {
+      "name": "Toggle",
+      "kind": "button",
+      "refersTo": "toggle",
+      "description": "A compact control: Open, Only this page, Excerpt, Copy with links. Pressed is an ink block.",
+      "html": "<button class=\"ds-tg\">Only this page</button> <button class=\"ds-tg ds-on\" aria-pressed=\"true\">Only this page</button>",
+      "css": ".ds-tg{display:inline-flex;align-items:center;min-height:36px;padding:0 12px;background:transparent;border:1.5px solid #1b1f1b;border-radius:0;font-family:'Atkinson Hyperlegible Next',system-ui,sans-serif;font-size:14px;font-weight:600;color:#1b1f1b}.ds-on{background:#1b1f1b;color:#fbfbf7}"
+    },
+    {
+      "name": "Field",
+      "kind": "input",
+      "refersTo": "field",
+      "description": "The question box: a real label above, a hint below, a 1.5px ink border.",
+      "html": "<label class=\"ds-label\" for=\"q\">What do you want to research?</label><input id=\"q\" class=\"ds-field\" placeholder=\"For example: laws on cage-free eggs\">",
+      "css": ".ds-label{display:block;font-family:'Atkinson Hyperlegible Next',system-ui,sans-serif;font-weight:700;font-size:17px;color:#1b1f1b;margin-bottom:8px}.ds-field{display:block;width:360px;min-height:56px;padding:12px;background:#fefefc;border:1.5px solid #1b1f1b;border-radius:0;color:#1b1f1b;font-size:16px}.ds-btn:focus-visible,.ds-field:focus-visible{outline:3px solid #1b1f1b;outline-offset:2px}"
+    },
+    {
+      "name": "Letter Tab",
+      "kind": "custom",
+      "refersTo": "tab",
+      "description": "A filled square in the page's colour with its letter. Colour never travels without the letter.",
+      "html": "<span class=\"ds-tab\" style=\"background:#1f5fa8\">A</span> <span class=\"ds-tab\" style=\"background:#8a5d00\">B</span> <span class=\"ds-tab\" style=\"background:#7a3e8a\">C</span>",
+      "css": ".ds-tab{display:inline-grid;place-items:center;width:24px;height:24px;color:#fbfbf7;font-family:'Atkinson Hyperlegible Next',system-ui,sans-serif;font-weight:800;font-size:14px}"
+    },
+    {
+      "name": "Label",
+      "kind": "custom",
+      "refersTo": "tab",
+      "description": "The signature: a specimen's data label under every line. Letter tab, host in mono, the page's own title.",
+      "html": "<div class=\"ds-line\"><p>Humane World is leading global efforts to promote non-animal research alternatives.</p><a class=\"ds-cite\" href=\"#\"><span class=\"ds-tab\" style=\"background:#1f5fa8\">A</span><span class=\"h\">humaneworld.org</span><span class=\"t\">Animal testing and research</span></a></div>",
+      "css": ".ds-tab{display:inline-grid;place-items:center;width:24px;height:24px;color:#fbfbf7;font-family:'Atkinson Hyperlegible Next',system-ui,sans-serif;font-weight:800;font-size:14px}.ds-line{width:420px;font-family:'Atkinson Hyperlegible Next',system-ui,sans-serif;color:#1b1f1b}.ds-line p{margin:0;font-size:17px;line-height:1.55}.ds-cite{display:grid;grid-template-columns:auto 1fr;column-gap:10px;align-items:center;margin-top:10px;text-decoration:none;color:#1b1f1b}.ds-cite .ds-tab{grid-row:1/span 2}.h{font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:13px;font-weight:600}.t{font-size:14px;color:#3c443d;grid-column:2}"
+    },
+    {
+      "name": "Pages Read Row",
+      "kind": "table",
+      "refersTo": "tab",
+      "description": "The key printed once above the lines: tab, page title, host, how many lines cite it, and the controls.",
+      "html": "<div class=\"ds-row\"><span class=\"ds-tab\" style=\"background:#8a5d00\">B</span><div><b>Cruelty Free International</b><div class=\"m\"><span class=\"h\">crueltyfreeinternational.org</span> 5 lines cite it</div></div><span class=\"ds-tg\">Only this page</span></div>",
+      "css": ".ds-tab{display:inline-grid;place-items:center;width:24px;height:24px;color:#fbfbf7;font-family:'Atkinson Hyperlegible Next',system-ui,sans-serif;font-weight:800;font-size:14px}.ds-row{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:start;width:520px;padding:14px 0;border-top:1px solid #b4beaf;font-family:'Atkinson Hyperlegible Next',system-ui,sans-serif;color:#1b1f1b}.ds-row b{font-weight:650}.m{font-size:14px;color:#3c443d;margin-top:2px}.h{font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:13px;margin-right:10px}.ds-tg{display:inline-flex;min-height:36px;padding:0 12px;border:1.5px solid #1b1f1b;align-items:center;font-size:14px;font-weight:600}"
+    },
+    {
+      "name": "Waiting Note",
+      "kind": "custom",
+      "refersTo": "note",
+      "description": "A real wait stated honestly: a dashed sunk box with the dashed-ring mark and a counted time.",
+      "html": "<div class=\"ds-note\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 14 14\"><rect x=\"2.5\" y=\"2.5\" width=\"9\" height=\"9\" fill=\"none\" stroke=\"#1b1f1b\" stroke-width=\"2\" stroke-dasharray=\"3 2\"/></svg><div><b>Researching a question</b><p>Searching the web, reading three pages and writing the brief. This usually takes under half a minute.</p></div></div>",
+      "css": ".ds-note{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;padding:14px 16px;border:1.5px dashed #566057;background:#d3dace;font-family:'Atkinson Hyperlegible Next',system-ui,sans-serif;font-size:15px;width:420px;color:#1b1f1b}.ds-note p{margin:0;color:#3c443d}.ds-note svg{margin-top:5px}"
+    },
+    {
+      "name": "Failure Note",
+      "kind": "custom",
+      "refersTo": "note-error",
+      "description": "The only place red appears: a red-bordered wash, a struck square, a named problem and a way forward.",
+      "html": "<div class=\"ds-err\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 14 14\"><rect x=\"2\" y=\"2\" width=\"10\" height=\"10\" fill=\"none\" stroke=\"#a8302a\" stroke-width=\"2\"/><path d=\"M2 12L12 2\" stroke=\"#a8302a\" stroke-width=\"2\"/></svg><div><b>The research did not finish</b><p>The n8n workflow returned an error. Check that it is running and active, then try again.</p></div></div>",
+      "css": ".ds-err{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;padding:14px 16px;border:1.5px solid #a8302a;background:#f6e1dd;font-family:'Atkinson Hyperlegible Next',system-ui,sans-serif;font-size:15px;width:420px;color:#1b1f1b}.ds-err b{color:#a8302a}.ds-err p{margin:0;color:#3c443d}.ds-err svg{margin-top:5px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Specimen Drawer",
+    "overview": "A cited-research tool set like a natural-history drawer: a cabinet-green bar over grey-green foam, and every line of the brief pinned to a data label that names the page it came from.",
+    "keyCharacteristics": [
+      "A cabinet-green bar carries the name and History; the page beneath is grey-green foam and white label cards.",
+      "The **label**: a letter tab (A, B, C) filled in the page's colour, the host in Atkinson Hyperlegible Mono, the page title beneath. Colour never travels without its letter.",
+      "**Pages read**, a key printed once above the lines: each page's full title, host, how many lines cite it, Open, **Only this page** (dims every line that cites another) and an in-place **Excerpt**.",
+      "One reading size on one measure (17px on about 62 characters) in every section, so a line never changes size because of what it says.",
+      "Red is reserved for failure: an unreadable answer or a workflow error. It is never a source colour.",
+      "A non-modal **History** drawer beside the page on a wide screen, above it on a narrow one.",
+      "Every wait and failure is stated in words with a way forward: a counted wait with Stop waiting, a named error with Try again.",
+      "Square corners, flat surfaces, no shadow, no blur, no gradient, no icon tiles."
+    ],
+    "rules": [
+      {
+        "name": "The Colour-Never-Travels-Alone Rule",
+        "body": "A source colour always appears with its letter, so identity survives greyscale and colour-blindness.",
+        "section": "colors"
+      },
+      {
+        "name": "The Failure-Only Red Rule",
+        "body": "Red marks failure and nothing else; a source is never red and an emphasis is never red.",
+        "section": "colors"
+      },
+      {
+        "name": "The One-Measure Rule",
+        "body": "Lines are one size on one measure in every section; hierarchy comes from scale and weight of headings, then from colour.",
+        "section": "typography"
+      },
+      {
+        "name": "The Mono-Means-Recorded Rule",
+        "body": "Monospace is for values the system recorded (hosts, seconds, raw output), never for headings or decoration.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat Rule",
+        "body": "If something needs to stand out, change its rule weight, its ground, or its mark. Never add a shadow.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do show a label under every line, and print each page's full detail once, in the key.",
+      "Do pair every source colour with its letter.",
+      "Do say what the system did: three pages read, region steers the model, a label shows origin and not truth.",
+      "Do keep red for failure only, and give every failure a named problem and a next step.",
+      "Do keep dimmed text at AA contrast: dim by switching to Ink 3, not by lowering opacity.",
+      "Do respect reduced motion; the one entrance (the key pins in, then the lines settle) disappears entirely."
+    ],
+    "donts": [
+      "Don't add shadows, blur, gradients, glow or rounded corners.",
+      "Don't use a coloured border-left, an eyebrow label above a heading, or a modal for History.",
+      "Don't add controls that do nothing (the old paperclip), badges that claim more than the data supports (the old \"Verified\"), or counts the data does not give.",
+      "Don't imply that the region filters the search, or that a cited page proves a claim.",
+      "Don't let pins, cork, handwriting or aged-paper texture turn the drawer into a museum prop."
+    ]
+  }
+}
