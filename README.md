@@ -2,7 +2,7 @@
 
 An AI-powered research tool for animal rights organizations. Enter a query and get structured insights, relevant organizations, trends, and actionable recommendations — powered by web search and LLM analysis.
 
-![Next.js](https://img.shields.io/badge/Next.js-15-black?logo=next.js)
+![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-38bdf8?logo=tailwindcss)
 
@@ -12,11 +12,12 @@ An AI-powered research tool for animal rights organizations. Enter a query and g
 
 - **AI-Powered Research** — Searches the web and analyzes results with an LLM
 - **Structured Output** — Key insights, organizations, trends, and actions, each linked to the page it came from
-- **Quick Actions** — Pre-built prompts for common research topics
-- **Copy to Clipboard** — Copy any section with one click
-- **Research History** — Sidebar with previous queries
+- **Pages Read** — A key of the three pages the answer was built from, each lettered A, B, C; "Only this page" dims every line that cites the others
+- **Starting Points** — Six pre-built questions for common topics
+- **Copy with Links** — Copy any section, each line followed by its link
+- **Research History** — A side drawer of this session's briefs (kept in the tab, cleared on reload)
 - **n8n Workflow** — Ready-to-import workflow for automation
-- **Dark Theme** — Nature-inspired emerald design
+- **Honest States** — A counted wait with Stop waiting, named errors with Try again, and an unreadable answer shown as a failure, never as a finding
 
 ---
 
@@ -69,15 +70,19 @@ app/
 ├── src/
 │   ├── app/
 │   │   ├── api/research/route.ts   # Backend research API
-│   │   ├── globals.css              # Theme & animations
-│   │   ├── layout.tsx               # Root layout
+│   │   ├── globals.css              # Design tokens and component styles
+│   │   ├── layout.tsx               # Root layout, fonts, metadata
+│   │   ├── icon.svg                 # Favicon
 │   │   └── page.tsx                 # Main page
-│   ├── components/ui/
-│   │   ├── button.tsx               # shadcn Button
-│   │   ├── textarea.tsx             # shadcn Textarea
-│   │   └── ruixen-moon-chat.tsx     # Main chat UI
+│   ├── components/research/
+│   │   ├── ResearchApp.tsx          # Question form, states, history
+│   │   ├── Brief.tsx                # The cited brief: key, lines, labels
+│   │   ├── History.tsx              # Side drawer
+│   │   └── Marks.tsx                # Logo and state marks
 │   └── lib/
+│       ├── brief.ts                 # Result types and pure helpers
 │       └── utils.ts                 # cn() utility
+├── PRODUCT.md, DESIGN.md            # Product and design records
 ├── n8n-workflow.json                # n8n workflow
 ├── .env.example                     # Env template
 └── package.json
@@ -89,7 +94,7 @@ app/
 
 | Layer    | Tech                         |
 | -------- | ---------------------------- |
-| Frontend | Next.js 15, Tailwind CSS 4   |
+| Frontend | Next.js 16, Tailwind CSS 4   |
 | Language | TypeScript                   |
 | Search   | Serper API (Google Search)   |
 | LLM      | Gemini API (Gemini 3.5 Flash-Lite) |
@@ -101,12 +106,12 @@ app/
 ## 🧪 Tests
 
 ```bash
-npm test      # 9 tests, no network, no n8n, no API key
+npm test      # 21 tests, no network, no n8n, no API key
 ```
 
 The Next.js route `src/app/api/research/route.ts` forwards each query to an n8n workflow, so the tests replace `fetch` and the environment and check the route's own behaviour: an empty or non-text query is refused with 400 and nothing is forwarded, a valid query goes to the webhook with the region (default `Global`) and the answer comes back, a missing `N8N_WEBHOOK_URL` is a clear 500, a workflow error is a 502, and an unreachable workflow is a 500. The last one found a real bug, now fixed: the response used to include the private webhook URL.
 
-`tests/workflow.test.ts` runs the workflow's own Code nodes from `n8n-workflow.json` with stubbed inputs: every insight, organization, trend and action must cite one of the pages the workflow read (an item citing any other page, or none, is dropped), and a page that fails to load contributes only its search snippet, not the error text. The search, page fetch and model calls are n8n HTTP nodes and are not covered. GitHub Actions runs the tests and a type check on every push.
+`tests/brief.test.ts` checks the page's own helpers (which page a line cites, copy text, sparse and unreadable answers) on shapes that real workflow runs returned. `tests/workflow.test.ts` runs the workflow's own Code nodes from `n8n-workflow.json` with stubbed inputs: every insight, organization, trend and action must cite one of the pages the workflow read (an item citing any other page, or none, is dropped), and a page that fails to load contributes only its search snippet, not the error text. The search, page fetch and model calls are n8n HTTP nodes and are not covered. GitHub Actions runs the tests and a type check on every push.
 
 ---
 

@@ -1,21 +1,19 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Atkinson_Hyperlegible_Mono, Atkinson_Hyperlegible_Next } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+// Atkinson Hyperlegible was drawn for legibility; the Mono sets hosts and timers, which are data.
+const ui = Atkinson_Hyperlegible_Next({ subsets: ["latin"], variable: "--font-ui", display: "swap" });
+const data = Atkinson_Hyperlegible_Mono({ subsets: ["latin"], variable: "--font-data", display: "swap" });
 
 export const metadata: Metadata = {
-  title: "AI Animal Advocacy Research Agent",
+  title: "Animal Advocacy Research",
   description:
-    "AI-powered research agent helping animal rights organizations discover campaigns, trends, and actionable insights.",
+    "Ask a question about animal advocacy and get a brief in which every line cites the web page it came from.",
+};
+
+export const viewport: Viewport = {
+  themeColor: "#25362c",
 };
 
 export default function RootLayout({
@@ -24,11 +22,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} dark h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col bg-[#0a0f0d]">{children}</body>
+    <html lang="en" className={`${ui.variable} ${data.variable}`}>
+      <body>{children}</body>
     </html>
   );
 }
