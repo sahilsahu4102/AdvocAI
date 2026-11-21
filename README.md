@@ -2,6 +2,8 @@
 
 An AI-powered research tool for animal rights organizations. Enter a query and get structured insights, relevant organizations, trends, and actionable recommendations — powered by web search and LLM analysis.
 
+🎥 **[Watch the demo video](https://drive.google.com/file/d/1U_sbAH7IHEZ40bN63tbe3obd_Z8xokV-/view?usp=sharing)**
+
 ![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-38bdf8?logo=tailwindcss)
